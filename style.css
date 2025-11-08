@@ -1,9 +1,11 @@
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', sans-serif;
 }
+
 
 body {
   display: flex;
@@ -13,11 +15,13 @@ body {
   background: #ffffff;
 }
 
+
 .container {
   width: 90%;
   max-width: 400px;
   text-align: center;
 }
+
 
 h2 {
   font-size: 24px;
@@ -29,11 +33,6 @@ h2 {
   font-size: 14px;
   color: #666;
   margin-bottom: 20px;
-}
-
-.logo {
-  width: 150px;
-  margin: 20px 0;
 }
 
 form {
@@ -77,6 +76,7 @@ label {
   text-decoration: none;
 }
 
+
 button {
   width: 100%;
   padding: 12px;
@@ -86,8 +86,587 @@ button {
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
   background-color: #0056b3;
 }
+
+.volver {
+  text-decoration: none;   
+  color:  rgb(129, 126, 129);           
+}
+
+.volver:visited,
+.volver:hover,
+.volver:active 
+  color: rgb(129, 126, 129);          
+  text-decoration: none;   
+
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.header h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header .icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filters button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  background: #e0e0e0;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.filters button.active {
+  background: #007BFF;
+  color: white;
+}
+
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 400px;
+  background: #f9f9f9;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+}
+
+.navbar button {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/*detalle*/
+.detalle-img {
+  width: 200px;
+  margin: 20px auto;
+  display: block;
+}
+
+
+.detalle-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.detalle-form {
+  text-align: left;
+}
+
+.detalle-form label {
+  font-weight: bold;
+  margin: 10px 0 5px;
+  display: block;
+}
+
+
+.input-box select {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+
+.botones-detalle {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.botones-detalle .cancelar {
+  background: #ff4d4d;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.botones-detalle .confirmar {
+  background: #28a745;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+
+.botones-detalle {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.botones-detalle button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.item img {
+  width: 100%;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.add {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.filters button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #ddd;
+  cursor: pointer;
+}
+
+.filters button.active {
+  background: #007bff;
+  color: white;
+}
+
+/* Tarjeta del formulario */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.card label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: bold;
+}
+
+.card input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* Botones del formulario */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  padding: 12px;
+  margin: 0 5px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn.cancel {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn.cancel:hover {
+  background: #ccc;
+}
+
+.btn.preview {
+  background: #ffc107;
+  color: #000;
+}
+
+.btn.preview:hover {
+  background: #e0a800;
+}
+
+.btn.confirm {
+  background: #007BFF;
+  color: white;
+  border: none;
+}
+
+.btn.confirm:hover {
+  background: #0056b3;
+}
+
+/* Grid de items */
+.grid-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 70px; /* deja espacio para la navbar */
+}
+
+.grid-items .item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 12px;
+  text-align: center;
+}
+
+.grid-items img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.grid-items p {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.btn-item {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #007BFF;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.btn-item:hover {
+  background: #0056b3;
+}
+
+/* ---------- CREACIÓN DE VALE ---------- */
+.vales-container {
+  width: 90%;
+  max-width: 400px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.vale-list {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.vale-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+.vale-item .tipo {
+  font-weight: bold;
+  color: #007BFF;
+}
+
+.vale-item .acciones button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.vale-detalle {
+  text-align: left;
+  background: #f1f1f1;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.botones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.botones .btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.btn.cancelar {
+  background: #dc3545;
+}
+
+.btn.preliminar {
+  background: #6c757d;
+}
+
+.btn.confirmar {
+  background: #007BFF;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.vales-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vale {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.vale:hover {
+  transform: scale(1.01);
+}
+
+.vale-header, .vale-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vale-items {
+  margin: 0.8rem 0;
+}
+
+.item {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.tipo {
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.editar, .eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 8px;
+  transition: color 0.2s;
+}
+
+.editar:hover {
+  color: #007bff;
+}
+
+.eliminar:hover {
+  color: #e63946;
+}
+
+.vale-preview {
+  background: #fefefe;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+/* ======== ESTILO PARA VISTA DEL MAESTRO ======== */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ddd;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tabla-vales {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tabla-vales th,
+.tabla-vales td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-vales th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-approve,
+.btn-reject {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-approve {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-reject {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-approve:hover { background-color: #45a049; }
+.btn-reject:hover { background-color: #e53935; }
+
+.btn.aprobar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn.rechazar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn.aprobar:hover {
+  background-color: #45a049;
+}
+
+.btn.rechazar:hover {
+  background-color: #c0392b;
+}
+
+.vale-footer .acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+
+

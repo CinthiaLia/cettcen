@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - Maestro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Encabezado -->
+    <div class="header">
+      <h3>Bienvenido Maestro</h3>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="mostrarSeccion('inventario')">Inventario</button>
+      <button class="tab-btn" onclick="mostrarSeccion('alumnos')">Alumnos</button>
+    </div>
+
+    <!-- Sección: Inventario -->
+    <div id="inventario" class="section active">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" onclick="filtrar('material')">Material</button>
+        <button class="filter-btn" onclick="filtrar('herramienta')">Herramienta</button>
+        <button class="filter-btn" onclick="filtrar('equipo')">Equipo</button>
+      </div>
+
+      <div id="items-grid" class="grid">
+        <!-- Materiales -->
+        <div class="item material">
+          <img src="imagen.jpg" alt="Estaño">
+          <p>Estaño</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Estaño')">Seleccionar</a>
+        </div>
+        <div class="item material">
+          <img src="imagen.jpg" alt="Resistencia">
+          <p>Resistencia</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Resistencia')">Seleccionar</a>
+        </div>
+
+        <!-- Herramientas -->
+        <div class="item herramienta">
+          <img src="imagen.jpg" alt="Cautín">
+          <p>Cautín</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Cautín')">Seleccionar</a>
+        </div>
+        <div class="item herramienta">
+          <img src="imagen.jpg" alt="Pinzas">
+          <p>Pinzas</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Pinzas')">Seleccionar</a>
+        </div>
+
+        <!-- Equipos -->
+        <div class="item equipo">
+          <img src="imagen.jpg" alt="Osciloscopio">
+          <p>Osciloscopio</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Osciloscopio')">Seleccionar</a>
+        </div>
+        <div class="item equipo">
+          <img src="imagen.jpg" alt="Multímetro">
+          <p>Multímetro</p>
+          <a href="creacion_vale_maestro.html" class="btn-item" onclick="guardarArticulo('Multímetro')">Seleccionar</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección: Alumnos -->
+    <div id="alumnos" class="section">
+      <h3>Vales pendientes de aprobación</h3>
+      <table class="tabla-vales">
+        <thead>
+          <tr>
+            <th>Alumno</th>
+            <th>Vale ID</th>
+            <th>Fecha</th>
+            <th>Artículo</th>
+            <th>Cantidad</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>María López</td>
+            <td>V001</td>
+            <td>2025-10-25</td>
+            <td>Resistencia 220Ω</td>
+            <td>10</td>
+            <td>
+              <button class="btn-approve">Aprobar</button>
+              <button class="btn-reject">Rechazar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Carlos Pérez</td>
+            <td>V002</td>
+            <td>2025-10-26</td>
+            <td>Multímetro</td>
+            <td>1</td>
+            <td>
+              <button class="btn-approve">Aprobar</button>
+              <button class="btn-reject">Rechazar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Script -->
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const items = document.querySelectorAll('#items-grid .item');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    let categoriaActiva = 'material';
+
+    // Filtrar elementos
+    function filtrar(categoria) {
+      categoriaActiva = categoria;
+      items.forEach(item => {
+        item.style.display = item.classList.contains(categoria) ? '' : 'none';
+      });
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filter-btn[onclick="filtrar('${categoria}')"]`).classList.add('active');
+    }
+
+    // Buscar
+    searchInput.addEventListener('input', function() {
+      const filtro = searchInput.value.toLowerCase();
+      items.forEach(item => {
+        const texto = item.querySelector('p').textContent.toLowerCase();
+        if (item.classList.contains(categoriaActiva)) {
+          item.style.display = texto.includes(filtro) ? '' : 'none';
+        }
+      });
+    });
+
+    filtrar('material');
+
+    // Mostrar secciones
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // Guardar artículo seleccionado y pasar a la creación del vale
+    function guardarArticulo(nombre) {
+      let articulos = JSON.parse(localStorage.getItem("articulosSeleccionados")) || [];
+      articulos.push(nombre);
+      localStorage.setItem("articulosSeleccionados", JSON.stringify(articulos));
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+

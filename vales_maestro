@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vales del Maestro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Encabezado -->
+    <div class="header">
+      <h3>Solicitudes</h3>
+      <p class="sub">Aquí puedes visualizar los materiales, herramientas o equipos que has solicitado.</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar...">
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+      <button class="active" onclick="filtrar('material')">Material</button>
+      <button onclick="filtrar('herramienta')">Herramienta</button>
+      <button onclick="filtrar('equipo')">Equipo</button>
+    </div>
+
+    <!-- Grid dinámico -->
+    <div id="items-grid" class="grid"></div>
+  </div>
+
+  <script>
+    const grid = document.getElementById("items-grid");
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filters button');
+    let categoriaActiva = 'material';
+
+    // ✅ Cargar vales desde localStorage
+    function cargarVales() {
+      const vales = JSON.parse(localStorage.getItem("valesMaestro")) || [];
+      grid.innerHTML = "";
+
+      if (vales.length === 0) {
+        grid.innerHTML = "<p>No hay solicitudes registradas.</p>";
+        return;
+      }
+
+      vales.forEach(vale => {
+        vale.articulos.forEach(articulo => {
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("item", determinarCategoria(articulo));
+
+          itemDiv.innerHTML = `
+            <img src="imagen.jpg" alt="${articulo}">
+            <p>${articulo}</p>
+            <small>${vale.fecha}</small>
+          `;
+          grid.appendChild(itemDiv);
+        });
+      });
+
+      filtrar(categoriaActiva);
+    }
+
+    // ✅ Determinar categoría automática por nombre (puedes cambiarlo)
+    function determinarCategoria(nombre) {
+      nombre = nombre.toLowerCase();
+      if (nombre.includes("oscil") || nombre.includes("proyector")) return "equipo";
+      if (nombre.includes("pinza") || nombre.includes("caut")) return "herramienta";
+      return "material";
+    }
+
+    // ✅ Función de filtros
+    function filtrar(categoria) {
+      categoriaActiva = categoria;
+      const items = document.querySelectorAll('#items-grid .item');
+      items.forEach(item => {
+        item.style.display = item.classList.contains(categoria) ? '' : 'none';
+      });
+
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filters button[onclick="filtrar('${categoria}')"]`).classList.add('active');
+    }
+
+    // ✅ Búsqueda
+    searchInput.addEventListener('input', function() {
+      const filter = searchInput.value.toLowerCase();
+      const items = document.querySelectorAll('#items-grid .item');
+      items.forEach(item => {
+        const text = item.querySelector('p').textContent.toLowerCase();
+        item.style.display = (
+          item.classList.contains(categoriaActiva) &&
+          text.includes(filter)
+        ) ? '' : 'none';
+      });
+    });
+
+    // ✅ Cargar vales al abrir
+    cargarVales();
+  </script>
+</body>
+</html>
+
+
+

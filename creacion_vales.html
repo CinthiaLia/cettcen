@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creación de Vale</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Creación de Vale</h2>
+    <p class="sub">Verifica los materiales, herramientas o equipos seleccionados</p>
+
+    <div class="card">
+      
+      <div class="vale-info">
+        <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+        <p><strong> Hora de salida:</strong> <span id="hora-salida"></span></p>
+        <p><strong> Hora de entrada:</strong> <span id="hora-entrada"></span></p>
+        <p><strong> Maestro:</strong> <span id="maestro"></span></p>
+      </div>
+
+      
+      <div class="items-list" id="items-list"></div>
+
+      <div class="form-buttons">
+        <a href="detalle.html" class="btn cancel">Regresar</a>
+        <button id="confirmarVale" class="btn confirm">Confirmar Vale</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      const fecha = localStorage.getItem("fecha");
+      const horaSalida = localStorage.getItem("hora_salida");
+      const horaEntrada = localStorage.getItem("hora_entrada");
+      const maestro = localStorage.getItem("maestro") || "No aplica";
+      const items = JSON.parse(localStorage.getItem("itemsSeleccionados")) || [];
+
+      
+      document.getElementById("fecha").textContent = fecha;
+      document.getElementById("hora-salida").textContent = horaSalida;
+      document.getElementById("hora-entrada").textContent = horaEntrada;
+      document.getElementById("maestro").textContent = maestro;
+
+      const lista = document.getElementById("items-list");
+
+      if (items.length === 0) {
+        lista.innerHTML = "<p>No se han seleccionado artículos.</p>";
+      } else {
+        items.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.classList.add("item-row");
+          div.innerHTML = `
+            <span>${item.nombre} <small>(${item.tipo})</small></span>
+            <div>
+              <button class="btn edit" onclick="editarItem(${index})">✏️</button>
+              <button class="btn delete" onclick="eliminarItem(${index})">🗑️</button>
+            </div>
+          `;
+          lista.appendChild(div);
+        });
+      }
+    });
+
+    
+    function eliminarItem(index) {
+      const items = JSON.parse(localStorage.getItem("itemsSeleccionados")) || [];
+      items.splice(index, 1);
+      localStorage.setItem("itemsSeleccionados", JSON.stringify(items));
+      location.reload();
+    }
+
+   
+    function editarItem(index) {
+      const nuevoNombre = prompt("Editar nombre del artículo:");
+      if (nuevoNombre) {
+        const items = JSON.parse(localStorage.getItem("itemsSeleccionados")) || [];
+        items[index].nombre = nuevoNombre;
+        localStorage.setItem("itemsSeleccionados", JSON.stringify(items));
+        location.reload();
+      }
+    }
+
+   
+    document.getElementById("confirmarVale").addEventListener("click", () => {
+      const vale = {
+        fecha: localStorage.getItem("fecha"),
+        hora_salida: localStorage.getItem("hora_salida"),
+        hora_entrada: localStorage.getItem("hora_entrada"),
+        maestro: localStorage.getItem("maestro"),
+        items: JSON.parse(localStorage.getItem("itemsSeleccionados")) || []
+      };
+
+      const vales = JSON.parse(localStorage.getItem("vales")) || [];
+      vales.push(vale);
+      localStorage.setItem("vales", JSON.stringify(vales));
+
+      localStorage.removeItem("itemsSeleccionados");
+
+      
+      window.location.href = "vales.html";
+    });
+  </script>
+</body>
+</html>

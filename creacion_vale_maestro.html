@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Vale - Maestro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h3>Creación de Vale</h3>
+      <p class="sub">Selecciona la fecha de solicitud y confirma tu préstamo.</p>
+    </div>
+
+    <div class="card">
+      <form id="formVale">
+        <label for="fecha">Fecha de solicitud</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <h4>Artículos solicitados</h4>
+        <ul id="lista-articulos"></ul>
+
+        <div class="form-buttons">
+          <a href="inicio_maestros" class="btn cancel">Cancelar</a>
+          <button type="submit" class="btn confirm">Confirmar solicitud</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+   
+    const articulos = JSON.parse(localStorage.getItem("articulosSeleccionados")) || [];
+    const lista = document.getElementById("lista-articulos");
+
+    if (articulos.length === 0) {
+      lista.innerHTML = "<li>No hay artículos seleccionados.</li>";
+    } else {
+      articulos.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        lista.appendChild(li);
+      });
+    }
+
+   
+    document.getElementById("formVale").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const fecha = document.getElementById("fecha").value;
+
+      
+      const vales = JSON.parse(localStorage.getItem("valesMaestro")) || [];
+      vales.push({
+        fecha: fecha,
+        articulos: articulos   
+      });
+
+      localStorage.setItem("valesMaestro", JSON.stringify(vales));
+      localStorage.removeItem("articulosSeleccionados");
+
+      alert("Vale registrado correctamente ");
+      window.location.href = "vales_maestro";
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Vales</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Mis vales</h2>
+    <p class="sub">Consulta tus solicitudes de préstamo</p>
+
+    <div id="vales-container" class="vales-container"></div>
+
+    <div class="form-buttons">
+      <a href="inicio.html" class="btn back">⬅️ Regresar al inicio</a>
+    </div>
+  </div>
+
+  <script>
+    // Función para formatear fecha
+    function formatearFecha(fecha) {
+      const [año, mes, dia] = fecha.split("-");
+      return `${dia}/${mes}/${año}`;
+    }
+
+    // Función para verificar si el vale puede editarse
+    function puedeEditar(fechaVale) {
+      const hoy = new Date();
+      const fecha = new Date(fechaVale);
+      const diferencia = (fecha - hoy) / (1000 * 60 * 60 * 24); // diferencia en días
+      return diferencia > 1; // editable solo si falta más de un día
+    }
+
+    // Cargar los vales desde localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      const vales = JSON.parse(localStorage.getItem("vales")) || [];
+      const contenedor = document.getElementById("vales-container");
+
+      if (vales.length === 0) {
+        contenedor.innerHTML = `<p>No tienes vales registrados aún.</p>`;
+        return;
+      }
+
+      vales.forEach((vale, index) => {
+        const editable = puedeEditar(vale.fecha);
+        const valeDiv = document.createElement("div");
+        valeDiv.classList.add("vale");
+
+        // encabezado del vale
+        let header = `
+          <div class="vale-header">
+            <span class="fecha">📅 ${formatearFecha(vale.fecha)}</span>
+            <span class="horario">🕒 ${vale.hora_salida} - ${vale.hora_entrada}</span>
+          </div>
+        `;
+
+        // lista de items
+        let itemsHTML = vale.items.map(item => `
+          <div class="item ${item.tipo}">
+            ${item.nombre} <span class="tipo">${item.tipo.charAt(0).toUpperCase()}</span>
+          </div>
+        `).join("");
+
+        // pie del vale
+        let footer = `
+          <div class="vale-footer">
+            <span class="maestro">${vale.maestro ? "👨‍🏫 " + vale.maestro : "👥 Profesor no requerido"}</span>
+            ${editable
+              ? `<button class="editar" onclick="editarVale(${index})">✏️ Editar</button>
+                 <button class="eliminar" onclick="eliminarVale(${index})">🗑️ Eliminar</button>`
+              : `<span class="estado">✔️ Confirmado</span>`
+            }
+          </div>
+        `;
+
+        valeDiv.innerHTML = header + `<div class="vale-items">${itemsHTML}</div>` + footer;
+        contenedor.appendChild(valeDiv);
+      });
+    });
+
+    // Eliminar vale
+    function eliminarVale(index) {
+      if (confirm("¿Deseas eliminar este vale?")) {
+        const vales = JSON.parse(localStorage.getItem("vales")) || [];
+        vales.splice(index, 1);
+        localStorage.setItem("vales", JSON.stringify(vales));
+        location.reload();
+      }
+    }
+
+    // Editar vale (redirecciona al formulario con los datos cargados)
+    function editarVale(index) {
+      const vales = JSON.parse(localStorage.getItem("vales")) || [];
+      const vale = vales[index];
+
+      // Restaurar datos en localStorage
+      localStorage.setItem("fecha", vale.fecha);
+      localStorage.setItem("hora_salida", vale.hora_salida);
+      localStorage.setItem("hora_entrada", vale.hora_entrada);
+      localStorage.setItem("maestro", vale.maestro);
+      localStorage.setItem("itemsSeleccionados", JSON.stringify(vale.items));
+
+      // Redirigir al formulario de edición
+      window.location.href = "detalle.html";
+    }
+  </script>
+</body>
+</html>

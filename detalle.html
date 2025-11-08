@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Préstamo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <h2>Registro de Préstamo</h2>
+    <p class="sub">Completa los detalles para confirmar tu vale</p>
+
+    <!-- Tarjeta del formulario -->
+    <div class="card">
+      <form action="creacion_vales.html" method="POST">
+
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <label for="hora-salida">Hora de salida</label>
+        <input type="time" id="hora-salida" name="hora_salida" required>
+
+        <label for="hora-entrada">Hora de entrada</label>
+        <input type="time" id="hora-entrada" name="hora_entrada" required>
+
+
+        <!-- Botones -->
+        <div class="form-buttons">
+          <a href="inicio.html" class="btn cancel">Cancelar</a>
+    
+          <button type="submit" class="btn confirm">Confirmar</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>
+
+
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vista Preliminar del Vale</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Vista Preliminar</h2>
+    <p class="sub">Revisa los datos antes de confirmar tu vale</p>
+
+    <!-- Tarjeta del vale -->
+    <div class="card vale-preview" id="previewCard">
+      <div class="vale-header">
+        <span id="prevFecha">📅 Fecha:</span>
+        <span id="prevHorario">🕒 Horario:</span>
+      </div>
+
+      <div class="vale-items" id="prevItems"></div>
+
+      <div class="vale-footer">
+        <span id="prevMaestro"> Maestro: —</span>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="form-buttons">
+      <a href="registro_prestamo.html" class="btn cancel">Volver</a>
+      <button id="confirmVale" class="btn confirm">Confirmar Vale</button>
+    </div>
+  </div>
+
+  <script>
+    // Cargar datos desde localStorage
+    const fecha = localStorage.getItem("fecha");
+    const horaSalida = localStorage.getItem("hora_salida");
+    const horaEntrada = localStorage.getItem("hora_entrada");
+    const maestro = localStorage.getItem("maestro");
+    const itemsSeleccionados = JSON.parse(localStorage.getItem("itemsSeleccionados")) || [];
+
+    // Mostrar datos
+    document.getElementById("prevFecha").textContent = ` ${fecha || "No especificada"}`;
+    document.getElementById("prevHorario").textContent = ` ${horaSalida || "--"} - ${horaEntrada || "--"}`;
+    
+
+    // Mostrar items seleccionados
+    const itemsContainer = document.getElementById("prevItems");
+    if (itemsSeleccionados.length === 0) {
+      itemsContainer.innerHTML = "<p>No se seleccionaron elementos</p>";
+    } else {
+      itemsSeleccionados.forEach(item => {
+        const div = document.createElement("div");
+        div.classList.add("item", item.tipo);
+        div.innerHTML = `${item.nombre} <span class="tipo">${item.tipo[0].toUpperCase()}</span>`;
+        itemsContainer.appendChild(div);
+      });
+    }
+
+    // Confirmar vale
+    document.getElementById("confirmVale").addEventListener("click", () => {
+      const nuevoVale = {
+        fecha,
+        hora_salida: horaSalida,
+        hora_entrada: horaEntrada,
+        maestro,
+        items: itemsSeleccionados
+      };
+
+      const vales = JSON.parse(localStorage.getItem("vales")) || [];
+      vales.push(nuevoVale);
+      localStorage.setItem("vales", JSON.stringify(vales));
+
+      localStorage.removeItem("itemsSeleccionados");
+      localStorage.removeItem("fecha");
+      localStorage.removeItem("hora_salida");
+      localStorage.removeItem("hora_entrada");
+      localStorage.removeItem("maestro");
+
+      window.location.href = "mis_vales.html";
+    });
+  </script>
+
+</body>
+</html>

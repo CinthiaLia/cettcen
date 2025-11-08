@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    
+    <div class="header">
+      <h3>Bienvenida</h3>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar...">
+    </div>
+
+   
+    <div class="filters">
+      <button class="active" onclick="filtrar('material')">Material</button>
+      <button onclick="filtrar('herramienta')">Herramienta</button>
+      <button onclick="filtrar('equipo')">Equipo</button>z
+    </div>
+
+    
+    <div id="items-grid" class="grid">
+      
+      <div class="item material">
+        <img src="imagen.jpg" alt="Estaño">
+        <p>Estaño</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+      <div class="item material">
+        <img src="imagen.jpg" alt="Resistencia">
+        <p>Resistencia</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+
+      
+      <div class="item herramienta">
+        <img src="imagen.jpg" alt="Cautín">
+        <p>Cautín</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+      <div class="item herramienta">
+        <img src="imagen.jpg" alt="Pinzas">
+        <p>Pinzas</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+
+      
+      <div class="item equipo">
+        <img src="imagen.jpg" alt="Osciloscopio">
+        <p>Osciloscopio</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+      <div class="item equipo">
+        <img src="imagen.jpg" alt="Multímetro">
+        <p>Multímetro</p>
+        <a href="detalle.html" class="btn-item">Seleccionar</a>
+      </div>
+    </div>
+  </div>
+
+ 
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const items = document.querySelectorAll('#items-grid .item');
+    const filterButtons = document.querySelectorAll('.filters button');
+    let categoriaActiva = 'material'; 
+
+    
+    function filtrar(categoria) {
+      categoriaActiva = categoria;
+      items.forEach(item => {
+        if (item.classList.contains(categoria)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Cambiar botón activo
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filters button[onclick="filtrar('${categoria}')"]`).classList.add('active');
+    }
+
+    // Función de búsqueda dentro de la categoría activa
+    searchInput.addEventListener('input', function() {
+      const filter = searchInput.value.toLowerCase();
+      items.forEach(item => {
+        const text = item.querySelector('p').textContent.toLowerCase();
+        if (item.classList.contains(categoriaActiva)) {
+          item.style.display = text.includes(filter) ? '' : 'none';
+        }
+      });
+    });
+
+    // Mostrar solo "materiales" al cargar
+    filtrar('material');
+  </script>
+</body>
+</html>
+
+
