@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel del Almacenista</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a2e0c6d1f7.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <h2>CETI</h2>
+        <p class="role">Almacenista</p>
+      </div>
+      <ul>
+        <li class="active" onclick="mostrarSeccion(event, 'vales')">
+          <i class="fa-solid fa-file-lines"></i> Vales
+        </li>
+        <li onclick="mostrarSeccion(event, 'inventario')">
+          <i class="fa-solid fa-boxes-stacked"></i> Inventario
+        </li>
+        <li onclick="mostrarSeccion(event, 'mantenimiento')">
+          <i class="fa-solid fa-screwdriver-wrench"></i> Mantenimiento
+        </li>
+        <li onclick="mostrarSeccion(event, 'grupos')">
+          <i class="fa-solid fa-users-gear"></i> Grupos y Alumnos
+        </li>
+        <li onclick="mostrarSeccion(event, 'estadisticas')">
+          <i class="fa-solid fa-chart-line"></i> Estadísticas
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <header class="topbar">
+        <h3>Panel de Control</h3>
+        <span id="fecha"></span>
+      </header>
+
+      <!-- === VALES === -->
+      <section id="vales" class="content-section active">
+        <h2>Vales Recibidos</h2>
+        <p>Consulta los vales solicitados por alumnos o maestros.</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Solicitante</th>
+              <th>Artículo</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tablaVales">
+            <tr><td colspan="6" class="empty">No hay vales registrados.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- === INVENTARIO === -->
+      <section id="inventario" class="content-section">
+        <h2>Gestión de Inventario</h2>
+        <p>Agrega, edita o da de baja materiales, herramientas y equipos.</p>
+        <div class="actions">
+          <button onclick="abrirFormulario('Material')"><i class="fa-solid fa-plus"></i> Agregar Material</button>
+          <button onclick="abrirFormulario('Herramienta')"><i class="fa-solid fa-plus"></i> Agregar Herramienta</button>
+          <button onclick="abrirFormulario('Equipo')"><i class="fa-solid fa-plus"></i> Agregar Equipo</button>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Fecha de ingreso</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tablaInventario">
+            <tr><td colspan="5" class="empty">Inventario vacío.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- === MANTENIMIENTO === -->
+      <section id="mantenimiento" class="content-section">
+        <h2>Mantenimiento de Equipos</h2>
+        <p>Registra mantenimientos por matrícula y verifica fechas programadas.</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Equipo</th>
+              <th>Matrícula</th>
+              <th>Fecha Programada</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" class="empty">No hay mantenimientos registrados.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- === GRUPOS Y ALUMNOS === -->
+      <section id="grupos" class="content-section">
+        <h2>Administración de Grupos y Alumnos</h2>
+        <p>Administra grupos y registra alumnos.</p>
+        <div class="actions">
+          <button onclick="agregarGrupo()"><i class="fa-solid fa-users"></i> Nuevo Grupo</button>
+          <label for="importarExcel" class="btn-importar"><i class="fa-solid fa-file-import"></i> Importar Alumnos</label>
+          <input type="file" id="importarExcel" accept=".xlsx, .xls" hidden>
+        </div>
+        <div id="contenedorGrupos" class="grupos-container">
+          <p class="empty">No hay grupos registrados.</p>
+        </div>
+      </section>
+
+      <!-- === ESTADÍSTICAS === -->
+      <section id="estadisticas" class="content-section">
+        <h2>Estadísticas de Solicitudes</h2>
+        <p>Visualiza los artículos más solicitados por mes.</p>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h4>Materiales más solicitados</h4>
+            <canvas id="grafMat"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Herramientas más solicitadas</h4>
+            <canvas id="grafHerr"></canvas>
+          </div>
+          <div class="chart-card">
+            <h4>Equipos más solicitados</h4>
+            <canvas id="grafEqp"></canvas>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- === FORMULARIO INVENTARIO === -->
+  <div id="modalFormulario" class="modal">
+    <div class="modal-content">
+      <h3 id="tituloFormulario">Registrar nuevo elemento</h3>
+      <form id="formInventario">
+        <label>Nombre del elemento:</label>
+        <input type="text" id="nombreElemento" required>
+        <label>Fecha de ingreso:</label>
+        <input type="date" id="fechaIngreso" required>
+        <label>Marca:</label>
+        <input type="text" id="marcaElemento">
+        <label>Semestre(s):</label>
+        <input type="text" id="semestreElemento">
+        <label>Características generales:</label>
+        <textarea id="caracteristicasElemento" rows="3"></textarea>
+        <div class="modal-buttons">
+          <button type="button" class="btn cancel" onclick="cerrarFormulario()">Cancelar</button>
+          <button type="submit" class="btn confirm">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- === DETALLE INVENTARIO === -->
+  <div id="modalDetalle" class="modal">
+    <div class="modal-panel">
+      <button class="close-btn" onclick="cerrarDetalle()">×</button>
+      <div class="modal-grid">
+        <div class="modal-left">
+          <div class="detalle-img"><i class="fa-solid fa-box-open"></i></div>
+          <div class="descripcion-box" id="descDetalle"></div>
+        </div>
+        <div class="modal-right">
+          <h4>Información del elemento</h4>
+          <table class="id-table" id="infoDetalle"></table>
+          <h4>Historial</h4>
+          <div class="historial" id="historialDetalle">Sin movimientos recientes.</div>
+          <form class="form-solicitud" onsubmit="solicitarAccion(event)">
+            <label>Solicitud:</label>
+            <select id="tipoSolicitud">
+              <option value="mantenimiento">Mantenimiento</option>
+              <option value="baja">Baja</option>
+            </select>
+            <label>Motivo:</label>
+            <textarea id="motivoSolicitud" rows="2" required></textarea>
+            <div class="modal-buttons">
+              <button type="button" class="btn neutral" onclick="cerrarDetalle()">Cancelar</button>
+              <button type="submit" class="btn confirm">Enviar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    let tipoActual = "", inventario = [], grupos = [];
+
+    // === CAMBIO DE SECCIONES ===
+    function mostrarSeccion(event, id) {
+      document.querySelectorAll(".content-section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      document.querySelectorAll(".sidebar ul li").forEach(li => li.classList.remove("active"));
+      event.target.classList.add("active");
+    }
+
+    // === FECHA ===
+    document.getElementById("fecha").textContent = new Date().toLocaleDateString("es-MX", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+
+    // === MODAL INVENTARIO ===
+    function abrirFormulario(tipo) {
+      tipoActual = tipo;
+      document.getElementById("tituloFormulario").textContent = `Registrar nuevo ${tipo}`;
+      document.getElementById("modalFormulario").style.display = "flex";
+    }
+    function cerrarFormulario() {
+      document.getElementById("modalFormulario").style.display = "none";
+      document.getElementById("formInventario").reset();
+    }
+
+    // === GUARDAR ELEMENTO ===
+    document.getElementById("formInventario").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombreElemento").value.trim();
+      const fecha = document.getElementById("fechaIngreso").value;
+      const marca = document.getElementById("marcaElemento").value;
+      const semestre = document.getElementById("semestreElemento").value;
+      const caracteristicas = document.getElementById("caracteristicasElemento").value;
+      const matricula = tipoActual.substring(0, 3).toUpperCase() + "-" + Math.floor(Math.random() * 9000 + 1000);
+      inventario.push({ matricula, nombre, tipo: tipoActual, fecha, marca, semestre, caracteristicas, cantidad: 1, estado: "disponible" });
+      actualizarInventario();
+      cerrarFormulario();
+    });
+
+    // === TABLA INVENTARIO ===
+    function actualizarInventario() {
+      const tabla = document.getElementById("tablaInventario");
+      tabla.innerHTML = "";
+      inventario.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${item.matricula}</td><td>${item.nombre}</td><td>${item.tipo}</td><td>${item.fecha}</td><td>${item.cantidad}</td>`;
+        tr.addEventListener("click", () => abrirDetalle(index));
+        tabla.appendChild(tr);
+      });
+    }
+
+    // === DETALLE ELEMENTO ===
+    function abrirDetalle(i) {
+      const item = inventario[i];
+      document.getElementById("descDetalle").textContent = item.caracteristicas || "Sin descripción.";
+      document.getElementById("infoDetalle").innerHTML = `
+        <tr><td><b>Matrícula:</b></td><td>${item.matricula}</td></tr>
+        <tr><td><b>Nombre:</b></td><td>${item.nombre}</td></tr>
+        <tr><td><b>Tipo:</b></td><td>${item.tipo}</td></tr>
+        <tr><td><b>Estado:</b></td><td><span class="badge ${item.estado}">${item.estado}</span></td></tr>`;
+      document.getElementById("modalDetalle").style.display = "flex";
+    }
+    function cerrarDetalle() {
+      document.getElementById("modalDetalle").style.display = "none";
+    }
+
+    // === SOLICITUD DE BAJA O MANTENIMIENTO ===
+    function solicitarAccion(e) {
+      e.preventDefault();
+      alert("Solicitud enviada correctamente.");
+      cerrarDetalle();
+    }
+
+    // === GRUPOS ===
+    function agregarGrupo() {
+      const nombre = prompt("Nombre del grupo:");
+      if (!nombre) return;
+      grupos.push({ nombre, alumnos: [] });
+      actualizarGrupos();
+    }
+
+    function actualizarGrupos() {
+      const cont = document.getElementById("contenedorGrupos");
+      cont.innerHTML = "";
+      grupos.forEach(g => {
+        const card = document.createElement("div");
+        card.classList.add("grupo-card");
+        card.innerHTML = `<h4>${g.nombre}</h4><ul>${g.alumnos.map(a => `<li>${a.nombre} (${a.registro})</li>`).join("") || "<li>Sin alumnos</li>"}</ul>`;
+        cont.appendChild(card);
+      });
+    }
+
+    // === IMPORTAR EXCEL ===
+    document.getElementById("importarExcel").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const alumnos = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        if (grupos.length === 0) grupos.push({ nombre: "Grupo importado", alumnos: [] });
+        alumnos.slice(1).forEach(row => {
+          const [nombre, registro] = row;
+          if (nombre && registro) grupos[0].alumnos.push({ nombre, registro });
+        });
+        actualizarGrupos();
+        alert("Alumnos importados correctamente.");
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // === GRÁFICAS ===
+    const chartBase = (ctx, label, data, colors) => new Chart(ctx, {
+      type: "pie",
+      data: { labels: label, datasets: [{ data: data, backgroundColor: colors }] },
+      options: { responsive: true, plugins: { legend: { position: "bottom" } } }
+    });
+
+    chartBase(document.getElementById("grafMat"), ["Cable", "Resistencia", "Soldadura"], [12, 8, 5], ["#60a5fa", "#1e90ff", "#0b1e63"]);
+    chartBase(document.getElementById("grafHerr"), ["Cautín", "Pinzas", "Llave"], [10, 7, 4], ["#34d399", "#059669", "#065f46"]);
+    chartBase(document.getElementById("grafEqp"), ["Multímetro", "Osciloscopio", "Generador"], [6, 4, 3], ["#f87171", "#ef4444", "#b91c1c"]);
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
